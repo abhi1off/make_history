@@ -49,7 +49,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         holder.eventMainHolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onItemClicked(eventList.get(position), position);
+                listener.onItemClicked(eventList.get(holder.getAdapterPosition()), holder.getAdapterPosition());
             }
         });
     }

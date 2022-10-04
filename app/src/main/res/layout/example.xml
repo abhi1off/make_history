@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/eventMainHolder"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="6dp"
+    app:cardCornerRadius="20dp"
+    android:layout_gravity="center_horizontal"
+    app:cardBackgroundColor="#A5DEF1">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal"
+
+        >
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3.5"
+            android:background="@drawable/ic_transactiondetails"
+            android:layout_marginLeft="10dp"
+            android:hint="EventName"
+            android:inputType="textLongMessage"
+            android:padding="5dp"
+            android:gravity="center_vertical"
+            android:textColor="#023C30"
+            android:textColorHint="#5E5D5D"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:clickable="true"
+            android:gravity="center"
+            android:background="@drawable/ic_baseline_keyboard_arrow_right_24"
+            android:textColor="#000000"
+            android:textSize="24sp"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

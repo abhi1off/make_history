@@ -3,6 +3,7 @@ package com.example.makehistory.makehistory;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -25,6 +26,7 @@ public class MainActivity2 extends AppCompatActivity {
     EditText evMessage;
     int myNewInt;
     ArrayList<DetailEventsClass> detailEventList;
+    ArrayList<DetailEventsClass> subDetailEventList;
     DetailEventAdapter detailEventAdapter;
     RecyclerView devTransactions;
 
@@ -33,6 +35,8 @@ public class MainActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         detailEventList = new ArrayList<DetailEventsClass>();
+        subDetailEventList = new ArrayList<DetailEventsClass>();
+        
         devTransactions = findViewById(R.id.devTransactions);
         evSend = findViewById(R.id.evSend);
         evYear = findViewById(R.id.evYear);
@@ -40,12 +44,23 @@ public class MainActivity2 extends AppCompatActivity {
 
         Intent intent = getIntent();
         myNewInt = intent.getIntExtra("pos",0);
+        Log.i("the int is",String.valueOf(myNewInt));
         loadData();
+        
+        //
+        for(int i=0;i<detailEventList.size();i++){
+            if(detailEventList.get(i).getPosition()==myNewInt){
+                subDetailEventList.add(detailEventList.get(i));
+            }
+        }
+        //
+
         // Initializing recycler view
         devTransactions.setHasFixedSize(true);
         devTransactions.setLayoutManager(new LinearLayoutManager(this));
-        detailEventAdapter = new DetailEventAdapter(this,detailEventList);
+        detailEventAdapter = new DetailEventAdapter(this,subDetailEventList);
         devTransactions.setAdapter(detailEventAdapter);
+        // detailEventAdapter.getFilter().filter(myNewInt)
 
         evSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,10 +77,11 @@ public class MainActivity2 extends AppCompatActivity {
                     return;
                 }
                 try {
+                    int pus = myNewInt;
                     int amt = Integer.parseInt(evYear.getText().toString().trim());
 
                     // Adding Transaction to recycler View
-                    sendTransaction(amt,evMessage.getText().toString().trim());
+                    sendTransaction(pus,amt,evMessage.getText().toString().trim());
 
                     evYear.setText("");
                     evMessage.setText("");
@@ -106,8 +122,9 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     // To add transaction
-    private void sendTransaction(int yr,String msg) {
-        detailEventList.add(new DetailEventsClass(yr,msg));
+    private void sendTransaction(int pu,int yr,String msg) {
+        subDetailEventList.add(new DetailEventsClass(pu,yr,msg));
+        detailEventList.add(new DetailEventsClass(pu,yr,msg));
         detailEventAdapter.notifyDataSetChanged();
 //        rvTransactions.smoothScrollToPosition(eventList.size()-1);
     }

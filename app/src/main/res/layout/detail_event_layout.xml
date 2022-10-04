@@ -15,26 +15,30 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
         android:background="@drawable/ic_transactiontype"
-        android:clickable="true"
-        android:gravity="center"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:text="2022"
         android:inputType="number"
         android:imeOptions="actionDone"
-        android:textColor="#000000"
-        android:textSize="34sp"
+        android:textColor="#B6B0B0"
+        android:textSize="20dp"
         android:textStyle="bold" />
 
 
-        <TextView
-            android:id="@+id/evDetEvent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="3dp"
-            android:background="@drawable/ic_transactioninfo"
-            android:text="Kohli Century 71st"
-            android:textAlignment="center"
-            android:textColor="#000000"
-            android:textSize="30sp" />
+    <TextView
+        android:id="@+id/evDetEvent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3dp"
+        android:paddingLeft="5dp"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/ic_transactioninfo"
+        android:text="Kohli Century 71st"
+        android:textStyle="bold"
+        android:textColor="#023C30"
+        android:textSize="20dp" />
 
 
 </LinearLayout>

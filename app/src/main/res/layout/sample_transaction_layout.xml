@@ -17,10 +17,12 @@
         android:layout_marginLeft="3dp"
         android:layout_marginBottom="6dp"
         android:layout_marginTop="3dp"
+        android:paddingLeft="10dp"
         android:background="@drawable/ic_transactiondetails"
         android:text="First War of Independence"
-        android:textAlignment="center"
+        android:gravity="center_vertical"
         android:textColor="#023C30"
+        android:textStyle="bold"
         android:textSize="20dp" />
 
 

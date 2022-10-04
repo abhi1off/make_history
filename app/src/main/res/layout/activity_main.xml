@@ -36,7 +36,8 @@
         app:cardBackgroundColor="#3A7B99"
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="false"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@id/guideline7"
         app:layout_constraintTop_toBottomOf="@id/guideline4"
         app:layout_constraintEnd_toEndOf="@id/guideline3"
         app:layout_constraintStart_toStartOf="@id/guideline2"
@@ -46,17 +47,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="0dp"
-            android:orientation="horizontal">
+            android:background="#A5DEF1"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
 
             <EditText
                 android:id="@+id/etMessage"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-
                 android:layout_weight="3.5"
-                android:background="@drawable/ic_transactioninfo"
-
+                android:background="@drawable/etbg"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
                 android:textStyle="bold"
                 android:hint="EventName"
                 android:inputType="textLongMessage"
@@ -72,10 +76,8 @@
                 android:layout_weight="0.5"
                 android:clickable="true"
                 android:gravity="center"
-                android:background="@drawable/ic_transactioninfo"
-                android:text="->"
-                android:textColor="#000000"
-                android:textSize="24sp"
+                android:background="@drawable/ic_baseline_subdirectory_arrow_right_24"
+                android:backgroundTint="#000000"
                 tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -117,7 +119,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
+        app:layout_constraintGuide_percent="0.03" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
@@ -131,6 +133,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="1" />
+        app:layout_constraintGuide_percent="0.93" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
