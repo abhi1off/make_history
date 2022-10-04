@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">mAkE\nhIsToRy</string>
+    <string-array name="modes_array">
+        <item>Expense</item>
+        <item>Earning</item>
+    </string-array>
+</resources>
