@@ -24,8 +24,11 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MainActivity2 extends AppCompatActivity {
+    public DetailEventsClass deletedTransaction;
     TextView title;
     TextView evSend;
     EditText evYear;
@@ -42,7 +45,7 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         detailEventList = new ArrayList<DetailEventsClass>();
         subDetailEventList = new ArrayList<DetailEventsClass>();
-        
+
         devTransactions = findViewById(R.id.devTransactions);
         evSend = findViewById(R.id.evSend);
         evYear = findViewById(R.id.evYear);
@@ -77,6 +80,8 @@ public class MainActivity2 extends AppCompatActivity {
         devTransactions.setAdapter(detailEventAdapter);
         // detailEventAdapter.getFilter().filter(myNewInt)
 
+        theSorter();
+
         evSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,7 +102,7 @@ public class MainActivity2 extends AppCompatActivity {
 
                     // Adding Transaction to recycler View
                     sendTransaction(pus,amt,evMessage.getText().toString().trim());
-
+                    theSorter();
                     evYear.setText("");
                     evMessage.setText("");
                     InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
@@ -125,7 +130,15 @@ public class MainActivity2 extends AppCompatActivity {
                 int position = viewHolder.getAdapterPosition();
                 // this method is called when we swipe our item to right direction.
                 // on below line we are getting the item at a particular position.
-                DetailEventsClass deletedTransaction = subDetailEventList.get(viewHolder.getAdapterPosition());
+                DetailEventsClass understandEvent = subDetailEventList.get(viewHolder.getAdapterPosition());
+
+                for(int k=0;k<subDetailEventList.size();k++){
+                    if(subDetailEventList.get(k).getDetailMessage().equals(understandEvent.getDetailMessage()) &&
+                            subDetailEventList.get(k).getYear()==understandEvent.getYear()){
+                        deletedTransaction = understandEvent;
+                        break;
+                    }
+                }
                 AlertDialog dialog = new AlertDialog.Builder(detailEventAdapter.ctxs)
                         .setCancelable(false)
                         .setTitle("Are you sure? The transaction will be deleted.")
@@ -158,12 +171,13 @@ public class MainActivity2 extends AppCompatActivity {
                                 //deleting from storage array
                                 for(int j=0;j<detailEventList.size();j++){
                                     if(detailEventList.get(j).getDetailMessage().equals(deletedTransaction.getDetailMessage()) &&
-                                    detailEventList.get(j).getYear()==deletedTransaction.getYear()){
+                                    detailEventList.get(j).getYear()==deletedTransaction.getYear()&&
+                                    detailEventList.get(j).getPosition().equals(deletedTransaction.getPosition())){
                                         detailEventList.remove(j);
                                     }
                                 }
                                 //
-                                detailEventList.remove(viewHolder.getAdapterPosition());
+//                                detailEventList.remove(viewHolder.getAdapterPosition());
                                 // below line is to notify our item is removed from adapter.
                                 detailEventAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                                 dialogInterface.dismiss();
@@ -209,6 +223,20 @@ public class MainActivity2 extends AppCompatActivity {
         {
             detailEventList=gson.fromJson(json,type);
         }
+    }
+
+    private void theSorter(){
+        Collections.sort(subDetailEventList, new Comparator<DetailEventsClass>() {
+            @Override
+            public int compare(DetailEventsClass o1, DetailEventsClass o2) {
+                int diff = o1.getYear() - o2.getYear();
+                if(diff == 0 ){
+                    return o1.getDetailMessage().compareTo(o2.getDetailMessage());
+                }else{
+                    return diff;
+                }
+            }
+        });
     }
 
     // Storing data locally
