@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -35,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements SelectEventListen
     public static TextView tvEmpty, tvBalance, monthYearTV;
     EditText etAmount, etMessage;
     TextView ivSend;
+    TextView title;
     boolean positive = true;
     RecyclerView rvTransactions;
     TransactionAdapter adapter;
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements SelectEventListen
         this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         View v = LayoutInflater.from(this).inflate(R.layout.custom_action_bar,null);
-
+        title =v.findViewById(R.id.title);
         // Setting balance
         getSupportActionBar().setCustomView(v);
         getSupportActionBar().setElevation(0);
@@ -270,9 +270,9 @@ public class MainActivity extends AppCompatActivity implements SelectEventListen
 
     @Override
     public void onItemClicked(EventClass eventClass, int pos) {
-        Toast.makeText(this,eventClass.getMessage(),Toast.LENGTH_LONG).show();
+//        Toast.makeText(this,eventClass.getMessage(),Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, MainActivity2.class);
-        intent.putExtra("pos",pos);
+        intent.putExtra("pos",eventClass.getMessage());
         startActivity(intent);
     }
 }

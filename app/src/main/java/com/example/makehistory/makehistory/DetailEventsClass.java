@@ -5,22 +5,22 @@ import java.util.ArrayList;
 public class DetailEventsClass {
     public static ArrayList<EventClass> transactionsList = new ArrayList<>();
 
-    private int position;
+    private String position;
     private String detailMessage;
     private int year;
 
-    public DetailEventsClass( int position, int year, String message) {
+    public DetailEventsClass( String position, int year, String message) {
 
         this.position = position;
         this.detailMessage = message;
         this.year = year;
     }
 
-    public int getPosition() {
+    public String getPosition() {
         return position;
     }
 
-    public void setPosition(int position) {
+    public void setPosition(String position) {
         this.position = position;
     }
 

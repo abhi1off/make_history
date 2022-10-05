@@ -1,15 +1,21 @@
 package com.example.makehistory.makehistory;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,11 +26,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MainActivity2 extends AppCompatActivity {
-    TextView textView2;
+    TextView title;
     TextView evSend;
     EditText evYear;
     EditText evMessage;
-    int myNewInt;
+    String myNewInt;
     ArrayList<DetailEventsClass> detailEventList;
     ArrayList<DetailEventsClass> subDetailEventList;
     DetailEventAdapter detailEventAdapter;
@@ -43,13 +49,22 @@ public class MainActivity2 extends AppCompatActivity {
         evMessage = findViewById(R.id.evMessage);
 
         Intent intent = getIntent();
-        myNewInt = intent.getIntExtra("pos",0);
-        Log.i("the int is",String.valueOf(myNewInt));
+        myNewInt = intent.getExtras().getString("pos");
+        Log.d("the int is: ",myNewInt);
         loadData();
-        
+
+            this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            View v = LayoutInflater.from(this).inflate(R.layout.custom_action_bar,null);
+            title =v.findViewById(R.id.title);
+            title.setText(myNewInt);
+            // Setting balance
+            getSupportActionBar().setCustomView(v);
+            getSupportActionBar().setElevation(0);
+
         //
         for(int i=0;i<detailEventList.size();i++){
-            if(detailEventList.get(i).getPosition()==myNewInt){
+            if(detailEventList.get(i).getPosition().equals(myNewInt)){
                 subDetailEventList.add(detailEventList.get(i));
             }
         }
@@ -66,9 +81,9 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Input Validation
-                if(evYear.getText().toString().trim().isEmpty())
+                if(evYear.getText().toString().trim().isEmpty() || evYear.getText().toString().trim().length() != 4)
                 {
-                    evYear.setError("Enter Amount!");
+                    evYear.setError("Enter Valid Year!");
                     return;
                 }
                 if(evMessage.getText().toString().isEmpty())
@@ -77,7 +92,7 @@ public class MainActivity2 extends AppCompatActivity {
                     return;
                 }
                 try {
-                    int pus = myNewInt;
+                    String pus = myNewInt;
                     int amt = Integer.parseInt(evYear.getText().toString().trim());
 
                     // Adding Transaction to recycler View
@@ -93,6 +108,94 @@ public class MainActivity2 extends AppCompatActivity {
                 }
             }
         });
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                // this method is called
+                // when the item is moved.
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                // below line is to get the position
+                // of the item at that position.
+                int position = viewHolder.getAdapterPosition();
+                // this method is called when we swipe our item to right direction.
+                // on below line we are getting the item at a particular position.
+                DetailEventsClass deletedTransaction = subDetailEventList.get(viewHolder.getAdapterPosition());
+                AlertDialog dialog = new AlertDialog.Builder(detailEventAdapter.ctxs)
+                        .setCancelable(false)
+                        .setTitle("Are you sure? The transaction will be deleted.")
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //removing the item, if cancel is done then the action will be undone
+                                // this method is called when item is swiped.
+                                // below line is to remove item from our array list.
+                                subDetailEventList.remove(viewHolder.getAdapterPosition());
+                                // below line is to notify our item is removed from adapter.
+                                detailEventAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                                // adding on click listener to our action of snack bar.
+                                // below line is to add our item to array list with a position.
+                                subDetailEventList.add(position, deletedTransaction);
+                                // below line is to notify item is
+                                // added to our adapter class.
+                                detailEventAdapter.notifyItemInserted(position);
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // this method is called when item is swiped.
+                                // below line is to remove item from our array list.
+
+                                //deleting from view array
+                                subDetailEventList.remove(viewHolder.getAdapterPosition());
+                                //deleting from storage array
+                                for(int j=0;j<detailEventList.size();j++){
+                                    if(detailEventList.get(j).getDetailMessage().equals(deletedTransaction.getDetailMessage()) &&
+                                    detailEventList.get(j).getYear()==deletedTransaction.getYear()){
+                                        detailEventList.remove(j);
+                                    }
+                                }
+                                //
+                                detailEventList.remove(viewHolder.getAdapterPosition());
+                                // below line is to notify our item is removed from adapter.
+                                detailEventAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                                dialogInterface.dismiss();
+//                                checkIfEmpty(subDetailEventList.size());
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .create();
+                dialog.show();
+
+
+
+
+
+                // below line is to display our snack bar with action.
+//                Snackbar.make(rvTransactions, deletedTransaction.getMessage(), Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        // adding on click listener to our action of snack bar.
+//                        // below line is to add our item to array list with a position.
+//                        eventList.add(position, deletedTransaction);
+//
+//                        // below line is to notify item is
+//                        // added to our adapter class.
+//                        adapter.notifyItemInserted(position);
+//                    }
+//                }).show();
+            }
+            // at last we are adding this
+            // to our recycler view.
+        }).attachToRecyclerView(devTransactions);
+
 
     }
 
@@ -122,10 +225,9 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     // To add transaction
-    private void sendTransaction(int pu,int yr,String msg) {
+    private void sendTransaction(String pu,int yr,String msg) {
         subDetailEventList.add(new DetailEventsClass(pu,yr,msg));
         detailEventList.add(new DetailEventsClass(pu,yr,msg));
         detailEventAdapter.notifyDataSetChanged();
-//        rvTransactions.smoothScrollToPosition(eventList.size()-1);
     }
 }
